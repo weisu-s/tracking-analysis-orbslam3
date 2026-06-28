@@ -182,7 +182,7 @@ A more rigorous controlled study would use the same trajectory while removing te
 - Limitations:  
     The larger improvement observed in MH03 may be related to its higher angular velocity (Table 5.2), but this hypothesis requires further validation through controlled experiments.
 
-### References  
+## References  
 C. Campos et al. ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial and Multi-Map SLAM. IEEE Transactions on Robotics, 2021.   
 J. Sturm et al. A Benchmark for the Evaluation of RGB-D SLAM Systems. IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2012.  
 M. Burri et al. The EuRoC Micro Aerial Vehicle Datasets. International Journal of Robotics Research, 2016.
