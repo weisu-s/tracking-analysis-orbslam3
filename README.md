@@ -37,7 +37,7 @@ Gray labels denote the intermediate metrics logged at each stage for tracking an
 ## 4. Low-texture Analysis
 ### 4.1 Reduced Tracking Coverage under No-Texture Conditions
 
-### Results:
+### Results
 **Table 4.1. Tracking Performance Comparison**
 
 | Sequence    | Tracking Coverage | Total Frames |
@@ -50,11 +50,11 @@ Gray labels denote the intermediate metrics logged at each stage for tracking an
 ![tum_texture_notexture_map_init](figures/tum_low_texture_map_initialization.png)
 **Figure 4.1. ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
 
-### Qualitative Observation:
+### Qualitative Observations
 ![tum_notexture_view_sceenshot](figures/tum_notexture_orbslam3_viewer_sceenshot.png)
 **Figure 4.2. ORB-SLAM3 viewer snapshot under no-texture conditions**
 
-### Analysis:
+### Analysis
 - Observation (Table 4.1):  
 Coverage drops from 99.6% (texture) to 50.6% (no-texture).
 
@@ -77,10 +77,10 @@ Map initialization in the no-texture sequence occurs at frame 521 when N = 562 (
 The coverage loss can be explained by delayed map initialization under no-texture conditions.
 
 - Insight:  
-Low texture primarily affects map initialization rather than continuous tracking. In the strcutre-notexture sequence, once the initial map has been established, structural edges alone can provide adequate geometric constraints to sustain pose tracking (Fig.4.2).
+Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been established, structural edges alone can provide adequate geometric constraints to sustain pose tracking (Fig.4.2).
 
 ### 4.2 Pose Accuracy Degradation under No-Texture Conditions
-### Results:
+### Results
 
 **Table 4.2. Tracking Relative Pose Error (RPE) Comparison**
 | Sequence    | RPE RMSE (m) |
@@ -101,7 +101,7 @@ Low texture primarily affects map initialization rather than continuous tracking
 
 
 
-### Analysis:
+### Analysis
 - Observation (Table 4.2):  
 RPE RMSE increases from 0.008 m (texture) to 0.017 m (no-texture).
 
@@ -131,7 +131,7 @@ The TUM `rgbd_dataset_freiburg3_structure_texture_near` and `rgbd_dataset_freibu
 A more rigorous controlled study would use the same trajectory while removing texture, allowing texture to be isolated as the only changing factor.
 
 ## 5. IMU Integration Analysis
-### Results:
+### Results
 **Table 5.1. Stereo and Stereo-Inertial Tracking Performance on EuRoC MAV**
 
 | Sequence | Configuration | RPE RMSE (m) | Tracking Coverage | Total Frames |
@@ -158,7 +158,7 @@ A more rigorous controlled study would use the same trajectory while removing te
 ![euroc_mh03_final_pose_optimization](figures/euroc_mh03_pose_optimization.png)
 **Figure 5.2. Final Pose Optimization: stereo vs. stereo-inertial (EuRoC MH03)**
 
-### Analysis:
+### Analysis
 - Observation (Table 5.1):
     - RPE RMSE decreases from 0.028 m (stereo) to 0.0037 m (stereo-inertial) in MH01.
     - RPE RMSE decreases from 0.072 m (stereo) to 0.0053 m (stereo-inertial) in MH03.
@@ -181,3 +181,8 @@ A more rigorous controlled study would use the same trajectory while removing te
 
 - Limitations:  
     The larger improvement observed in MH03 may be related to its higher angular velocity (Table 5.2), but this hypothesis requires further validation through controlled experiments.
+
+### References  
+C. Campos et al. ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial and Multi-Map SLAM. IEEE Transactions on Robotics, 2021.   
+J. Sturm et al. A Benchmark for the Evaluation of RGB-D SLAM Systems. IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2012.  
+M. Burri et al. The EuRoC Micro Aerial Vehicle Datasets. International Journal of Robotics Research, 2016.
