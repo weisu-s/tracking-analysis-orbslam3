@@ -23,14 +23,27 @@ Gray labels denote the intermediate metrics logged at each stage for tracking an
 | Final pose optimization       | `inliers_after_final_opt`, `final_mean_visual_chi2`                            |
 
 
+The logged `final_mean_visual_chi2` is computed from the weighted reprojection error used by ORB-SLAM3 during pose optimization:
+
+$$
+\chi^2 = \mathbf{e}^{T}\mathbf{\Omega}\mathbf{e},
+$$
+
+where
+
+- $\mathbf{e}$ is the reprojection residual vector
+- $\mathbf{\Omega}$ is the information matrix (the inverse of the measurement covariance)
+
+The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual edges after the final pose optimization, where the number of accepted edges is logged as `inliers_after_final_opt`. A lower `final_mean_visual_chi2` indicates that the accepted visual constraints are more geometrically consistent with the estimated pose, although it does not by itself guarantee correct data association.
+
 ---
 
 ## 3. Key Findings
-| Finding | Interpretation |
+| Finding | Observation |
 |------------|-------------|
 | **Low texture – Tracking coverage ↓** | Delayed map initialization due to insufficient ORB keypoints. Once initialized, tracking remains operational in the no-texture sequence. |
-| **Low texture – Pose accuracy ↓** | Low texture reduces the quantity of reliable visual constraints rather than the geometric quality of accepted correspondences. |
-| **IMU integration – Pose accuracy ↑** | IMU integration increases the quantity of reliable visual constraints rather than improving the geometric quality of accepted correspondences. |
+| **Low texture – Pose accuracy ↓** | Low texture reduces the number of accepted visual constraints. |
+| **IMU integration – Pose accuracy ↑** | IMU integration increases the number of accepted visual constraints. |
 
 ----
 
@@ -115,9 +128,9 @@ RPE RMSE increases from 0.008 m (texture) to 0.017 m (no-texture).
         - fewer correspondences before optimization, fewer inliers after optimization, while maintaining a similar mean visual χ² (Fig. 4.5)
 
 - Interpretation:   
-    - The instrumented metrics suggest that low texture reduces the **quantity** of reliable visual constraints rather than the **quality** of retained constraints. 
+    - The instrumented metrics suggest that low texture reduces the number of accepted visual constraints. 
 
-    - The similar mean visual χ² values indicate that the retained correspondences remain geometrically consistent, indicating that the dominant effect of low texture is the reduction in available constraints.
+    - The similar mean visual χ² values indicate that the accepted visual constraints remain geometrically consistent, suggesting that the dominant effect of low texture is the reduction in available constraints rather than a degradation in the weighted reprojection residual of accepted constraints.
 
 - Qualitative Observation (Fig. 4.2):
     - Tracking remains operational throughout the no-texture sequence after the map initialization.
@@ -175,9 +188,9 @@ A more rigorous controlled study would use the same trajectory while removing te
     The stereo-inertial configuration maintains consistently low RPE throughout the entire sequence, whereas stereo-only tracking exhibits substantially larger fluctuations.
 
 - Interpretation:  
-    - The instrumented metrics suggest that IMU integration primarily increases the **quantity** of reliable visual constraints rather than the **quality** of retained constraints.    
+    - The instrumented metrics suggest that IMU integration primarily increases the number of accepted visual constraints.    
 
-    - The similar mean visual reprojection χ² values indicate that the retained correspondences remain geometrically consistent after optimization. Therefore, the dominant contribution of IMU integration is the increase in available visual constraints, which can improve pose estimation accuracy.
+    - The similar mean visual reprojection χ² values suggest that the accepted visual constraints remain geometrically consistent after optimization. Therefore, the dominant contribution of IMU integration is the increase in available visual constraints, which can improve pose estimation accuracy.
 
 - Limitations:  
     The larger improvement observed in MH03 may be related to its higher angular velocity (Table 5.2), but this hypothesis requires further validation through controlled experiments.
