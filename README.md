@@ -50,8 +50,8 @@ The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual ed
 ## 4. Low-texture Analysis
 ### 4.1 Reduced Tracking Coverage under No-Texture Conditions
 
-### Results
-**Table 4.1. Tracking Performance Comparison**
+### 4.1.1 Results
+**Table 4.1 Tracking Performance Comparison**
 
 | Sequence    | Tracking Coverage | Total Frames |
 | ---------- | ----------------: | -----------: |
@@ -61,13 +61,16 @@ The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual ed
 
 
 ![tum_texture_notexture_map_init](figures/tum_low_texture_map_initialization.png)
-**Figure 4.1. ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
+**Figure 4.1 ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
 
-### Qualitative Observations
+### 4.1.2 Qualitative Observations
 ![tum_notexture_view_sceenshot](figures/tum_notexture_orbslam3_viewer_sceenshot.png)
-**Figure 4.2. ORB-SLAM3 viewer snapshot under no-texture conditions**
+**Figure 4.2 ORB-SLAM3 viewer snapshot under no-texture conditions**
 
-### Analysis
+- Tracking remains operational throughout the no-texture sequence after the map initialization.
+- Feature points are primarily detected along structural edges and corners.
+
+### 4.1.3 Analysis
 - Observation (Table 4.1):  
 Coverage drops from 99.6% (texture) to 50.6% (no-texture).
 
@@ -75,7 +78,7 @@ Coverage drops from 99.6% (texture) to 50.6% (no-texture).
 Map initialization requires more than 500 keypoints (N > 500).  
 See `Tracking.cc`, `Tracking::StereoInitialization()`.
 
-- Instrumentation :  
+- Instrumentation:  
 Map initialization in the no-texture sequence occurs at frame 521 when N = 562 (Fig. 4.1).
 
 - Verification: 
@@ -93,9 +96,9 @@ The coverage loss can be explained by delayed map initialization under no-textur
 Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been established, structural edges alone can provide adequate geometric constraints to sustain pose tracking (Fig.4.2).
 
 ### 4.2 Pose Accuracy Degradation under No-Texture Conditions
-### Results
+### 4.2.1 Results
 
-**Table 4.2. Tracking Relative Pose Error (RPE) Comparison**
+**Table 4.2 Tracking Relative Pose Error (RPE) Comparison**
 | Sequence    | RPE RMSE (m) |
 | ---------- | -----------: |
 | `rgbd_dataset_freiburg3_structure_texture_near` |      0.00874 |
@@ -103,18 +106,17 @@ Low texture primarily affects map initialization rather than continuous tracking
 
 
 ![tum_initial_pose_optimization](figures/tum_initial_pose_optimization.png)
-**Figure 4.3. Initial Pose Optimization: Texture vs. No-Texture**
+**Figure 4.3 Initial Pose Optimization: Texture vs. No-Texture**
 
 
 ![tum_local_map_search](figures/tum_local_map_search.png)
-**Figure 4.4. Local Map Search: Texture vs. No-Texture**
+**Figure 4.4 Local Map Search: Texture vs. No-Texture**
 
 ![tum_final_pose_optimization](figures/tum_final_pose_optimization.png)
-**Figure 4.5. Final Pose Optimization: Texture vs. No-Texture**
+**Figure 4.5 Final Pose Optimization: Texture vs. No-Texture**
 
 
-
-### Analysis
+### 4.2.2 Analysis
 - Observation (Table 4.2):  
 RPE RMSE increases from 0.008 m (texture) to 0.017 m (no-texture).
 
@@ -133,8 +135,6 @@ RPE RMSE increases from 0.008 m (texture) to 0.017 m (no-texture).
     - The similar mean visual χ² values indicate that the accepted visual constraints remain geometrically consistent, suggesting that the dominant effect of low texture is the reduction in available constraints rather than a degradation in the weighted reprojection residual of accepted constraints.
 
 - Qualitative Observation (Fig. 4.2):
-    - Tracking remains operational throughout the no-texture sequence after the map initialization.
-    - Feature points are primarily detected along structural edges and corners.
     - Structural edges and corners appears sufficient to maintain visual tracking, although with reduced accuracy and fewer visual constraints.
 
 - Limitations:  
@@ -144,8 +144,8 @@ The TUM `rgbd_dataset_freiburg3_structure_texture_near` and `rgbd_dataset_freibu
 A more rigorous controlled study would use the same trajectory while removing texture, allowing texture to be isolated as the only changing factor.
 
 ## 5. IMU Integration Analysis
-### Results
-**Table 5.1. Stereo and Stereo-Inertial Tracking Performance on EuRoC MAV**
+### 5.1 Results
+**Table 5.1 Stereo and Stereo-Inertial Tracking Performance on EuRoC MAV**
 
 | Sequence | Configuration | RPE RMSE (m) | Tracking Coverage | Total Frames |
 |---------|---------------|-------------:|------------------:|-------------:|
@@ -156,7 +156,7 @@ A more rigorous controlled study would use the same trajectory while removing te
 
 **Note.** To ensure a fair comparison with the stereo-only configuration, the local map search radius for stereo-inertial configuration after IMU initialization was changed from **2** (ORB-SLAM3 default for stereo-inertial) to **1** (the stereo-only setting) .
 
-**Table 5.2. EuRoC Angular Velocity Statistics**
+**Table 5.2 EuRoC Angular Velocity Statistics**
 
 | Sequence | Mean (rad/s) | 95th Percentile (rad/s) | Samples > 1 rad/s (%) |
 |----------|-------------:|------------------------:|-----------------------:|
@@ -166,12 +166,12 @@ A more rigorous controlled study would use the same trajectory while removing te
 **Note.** Angular velocity statistics were computed from the IMU gyroscope measurements. MH03 exhibits consistently higher rotational motion than MH01.
 
 ![euroc_mh01_final_pose_optimization](figures/euroc_mh01_pose_optimization.png)
-**Figure 5.1. Final Pose Optimization: stereo vs. stereo-inertial (EuRoC MH01)**
+**Figure 5.1 Final Pose Optimization: stereo vs. stereo-inertial (EuRoC MH01)**
 
 ![euroc_mh03_final_pose_optimization](figures/euroc_mh03_pose_optimization.png)
-**Figure 5.2. Final Pose Optimization: stereo vs. stereo-inertial (EuRoC MH03)**
+**Figure 5.2 Final Pose Optimization: stereo vs. stereo-inertial (EuRoC MH03)**
 
-### Analysis
+### 5.2 Analysis
 - Observation (Table 5.1):
     - RPE RMSE decreases from 0.028 m (stereo) to 0.0037 m (stereo-inertial) in MH01.
     - RPE RMSE decreases from 0.072 m (stereo) to 0.0053 m (stereo-inertial) in MH03.
