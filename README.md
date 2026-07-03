@@ -50,7 +50,7 @@ The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual ed
 ## 4. Low-texture Analysis
 ### 4.1 Reduced Tracking Coverage under No-Texture Conditions
 
-### 4.1.1 Results
+#### 4.1.1 Results
 **Table 4.1 Tracking Performance Comparison**
 
 | Sequence    | Tracking Coverage | Total Frames |
@@ -63,14 +63,14 @@ The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual ed
 ![tum_texture_notexture_map_init](figures/tum_low_texture_map_initialization.png)
 **Figure 4.1 ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
 
-### 4.1.2 Qualitative Observations
+#### 4.1.2 Qualitative Observations
 ![tum_notexture_view_sceenshot](figures/tum_notexture_orbslam3_viewer_sceenshot.png)
 **Figure 4.2 ORB-SLAM3 viewer snapshot under no-texture conditions**
 
 - Tracking remains operational throughout the no-texture sequence after the map initialization.
 - Feature points are primarily detected along structural edges and corners.
 
-### 4.1.3 Analysis
+#### 4.1.3 Analysis
 - Observation (Table 4.1):  
 Coverage drops from 99.6% (texture) to 50.6% (no-texture).
 
@@ -96,7 +96,7 @@ The coverage loss can be explained by delayed map initialization under no-textur
 Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been established, structural edges alone can provide adequate geometric constraints to sustain pose tracking (Fig.4.2).
 
 ### 4.2 Pose Accuracy Degradation under No-Texture Conditions
-### 4.2.1 Results
+#### 4.2.1 Results
 
 **Table 4.2 Tracking Relative Pose Error (RPE) Comparison**
 | Sequence    | RPE RMSE (m) |
@@ -116,7 +116,7 @@ Low texture primarily affects map initialization rather than continuous tracking
 **Figure 4.5 Final Pose Optimization: Texture vs. No-Texture**
 
 
-### 4.2.2 Analysis
+#### 4.2.2 Analysis
 - Observation (Table 4.2):  
 RPE RMSE increases from 0.008 m (texture) to 0.017 m (no-texture).
 
