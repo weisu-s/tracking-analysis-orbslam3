@@ -1,10 +1,10 @@
-# Analysis of Tracking Behavior of Visual and Visual-Inertial SLAM (ORB-SLAM3)
+# Analysis of Tracking Behavior in Visual and Visual-Inertial SLAM (ORB-SLAM3)
 
 ## 1. Experimental Design
 | Experiment | Dataset Sequence | Environment / Motion  | Purpose |
 |------------|---------|----------------------|---------|
 | **Low-texture analysis** | `rgbd_dataset_freiburg3_structure_texture_near` (TUM RGB-D) | Structured scene with texture | Reference sequence for the effect of low texture |
-| | `rgbd_dataset_freiburg3_structure_notexture_near` (TUM RGB-D) | Structured scene with no texture | Evaluate the effect of low texture |
+| | `rgbd_dataset_freiburg3_structure_notexture_near` (TUM RGB-D) | Structured scene with low-texture | Evaluate the effect of low texture |
 | **IMU integration analysis** | `MH_01_easy` (EuRoC MAV) | Relatively mild motion | Compare stereo and stereo-inertial tracking under mild motion |
 | | `MH_03_medium` (EuRoC MAV) | More aggressive rotational motion | Compare stereo and stereo-inertial tracking under higher rotational motion |
 
@@ -32,7 +32,7 @@ $$
 where
 
 - $\mathbf{e}$ is the reprojection residual vector
-- $\mathbf{\Omega}$ is the information matrix (the inverse of the measurement covariance)
+- $\mathbf{\Omega}$ is the information matrix (the inverse of the estimation error covariance matrix)
 
 The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual edges after the final pose optimization, where the number of accepted edges is logged as `inliers_after_final_opt`. A lower `final_mean_visual_chi2` indicates that the accepted visual constraints are more geometrically consistent with the estimated pose, although it does not by itself guarantee correct data association.
 
@@ -99,8 +99,9 @@ Low texture primarily affects map initialization rather than continuous tracking
 #### 4.2.1 Results
 
 **Table 4.2 Tracking Relative Pose Error (RPE) Comparison**
+
 | Sequence    | RPE RMSE (m) |
-| ---------- | -----------: |
+| ---------- | -----------|
 | `rgbd_dataset_freiburg3_structure_texture_near` |      0.00874 |
 | `rgbd_dataset_freiburg3_structure_notexture_near` |    0.01737 |
 
