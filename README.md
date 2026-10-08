@@ -8,7 +8,7 @@ The experiments investigate the effects of **low-texture conditions** and **IMU 
 |------------|---------|----------------------|
 | **Low-texture analysis** | `rgbd_dataset_freiburg3_structure_texture_near` (TUM RGB-D) |  Texture | 
 | | `rgbd_dataset_freiburg3_structure_notexture_near` (TUM RGB-D) | Low-texture | 
-| **IMU integration analysis** | `MH_01_easy` (EuRoC MAV) | Mild motion | 
+| **IMU integration analysis** | `MH_01_easy` (EuRoC MAV) | Lower rotational motion | 
 | | `MH_03_medium` (EuRoC MAV) | Higher rotational motion | 
 
 
@@ -71,7 +71,14 @@ A lower `final_mean_visual_chi2` indicates that the accepted visual constraints 
 ## 4. Low-texture Analysis
 ### 4.1 Reduced Tracking Coverage under No-Texture Conditions
 
-#### 4.1.1 Results
+#### 4.1.1 Qualitative Observations
+![tum_notexture_view_sceenshot](figures/tum_notexture_orbslam3_viewer_sceenshot.png)
+**Figure 4.1 ORB-SLAM3 viewer snapshot under no-texture conditions**
+
+- Tracking remains operational throughout the no-texture sequence after the map initialization.
+- Feature points are primarily detected along visible geometric boundaries and near corners.
+
+#### 4.1.2 Results
 **Table 4.1 Tracking Performance Comparison**
 
 | Sequence    | Tracking Coverage | Total Frames |
@@ -82,14 +89,9 @@ A lower `final_mean_visual_chi2` indicates that the accepted visual constraints 
 
 
 ![tum_texture_notexture_map_init](figures/tum_low_texture_map_initialization.png)
-**Figure 4.1 ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
+**Figure 4.2 ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
 
-#### 4.1.2 Qualitative Observations
-![tum_notexture_view_sceenshot](figures/tum_notexture_orbslam3_viewer_sceenshot.png)
-**Figure 4.2 ORB-SLAM3 viewer snapshot under no-texture conditions**
 
-- Tracking remains operational throughout the no-texture sequence after the map initialization.
-- Feature points are primarily detected along visible geometric boundaries and near corners.
 
 #### 4.1.3 Analysis
 - Observation (Table 4.1):  
@@ -100,7 +102,7 @@ Map initialization requires more than 500 keypoints (N > 500).
 See `Tracking.cc`, `Tracking::StereoInitialization()`.
 
 - Instrumentation:  
-Map initialization in the no-texture sequence occurs at frame 521 when N = 562 (Fig. 4.1).
+Map initialization in the no-texture sequence occurs at frame 521 when N = 562 (Fig. 4.2).
 
 - Verification: 
     - No-texture sequence length = 1055 frames
@@ -111,10 +113,10 @@ Map initialization in the no-texture sequence occurs at frame 521 when N = 562 (
 0.506
 
 - Conclusion:   
-The coverage loss can be explained by delayed map initialization under no-texture condition.
+The coverage loss can be explained by delayed map initialization under no-texture conditions.
 
 - Insight:  
-Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been built, visual features detected along geometric boundaries can provide sufficient constraints to sustain pose tracking. (Fig.4.2).
+Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been built, visual features detected along geometric boundaries can provide sufficient constraints to sustain pose tracking. (Fig.4.1).
 
 ### 4.2 Pose Accuracy Degradation under No-Texture Conditions
 #### 4.2.1 Results
