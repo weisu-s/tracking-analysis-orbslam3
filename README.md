@@ -1,21 +1,38 @@
 # Analysis of Tracking Behavior in Visual and Visual-Inertial SLAM (ORB-SLAM3)
 
 ## 1. Experimental Design
-| Experiment | Dataset Sequence | Environment / Motion  | Purpose |
-|------------|---------|----------------------|---------|
-| **Low-texture analysis** | `rgbd_dataset_freiburg3_structure_texture_near` (TUM RGB-D) | Structured scene with texture | Reference sequence for the effect of low texture |
-| | `rgbd_dataset_freiburg3_structure_notexture_near` (TUM RGB-D) | Structured scene with low-texture | Evaluate the effect of low texture |
-| **IMU integration analysis** | `MH_01_easy` (EuRoC MAV) | Relatively mild motion | Compare stereo and stereo-inertial tracking under mild motion |
-| | `MH_03_medium` (EuRoC MAV) | More aggressive rotational motion | Compare stereo and stereo-inertial tracking under higher rotational motion |
+
+The experiments investigate the effects of **low-texture conditions** and **IMU integration** on ORB-SLAM3 tracking using selected sequences from the TUM RGB-D and EuRoC MAV datasets.
+
+| Experiment | Dataset Sequence | Condition  | 
+|------------|---------|----------------------|
+| **Low-texture analysis** | `rgbd_dataset_freiburg3_structure_texture_near` (TUM RGB-D) |  Texture | 
+| | `rgbd_dataset_freiburg3_structure_notexture_near` (TUM RGB-D) | Low-texture | 
+| **IMU integration analysis** | `MH_01_easy` (EuRoC MAV) | Mild motion | 
+| | `MH_03_medium` (EuRoC MAV) | Higher rotational motion | 
+
+
+
+<p align="center">
+  <img src="figures/tum_structure_texture_a_frame.png"
+       height="300" alt="Texture sequence">
+  <img src="figures/tum_structure_notexture_a_frame.png"
+       height="300" alt="No-texture sequence">
+</p>
+<p align="center">
+  Representative RGB frames from the TUM RGB-D
+  structure_texture (left) and structure_notexture (right) sequences
+</p>
+
 
 ---
 
 ## 2. ORB-SLAM3 Tracking Pipeline and Instrumentation
 ![ORB-SLAM3 Tracking Pipeline](diagrams/instrumented_orbslam3_tracking_pipeline.png)
 
-Gray labels denote the intermediate metrics logged at each stage for tracking analysis.
+Gray labels denote the metrics logged at each stage for tracking analysis.
 
-| Tracking Stage                         | Logged variables                                                               |
+| Tracking Stage                         | Logged metrics                                                               |
 | ----------------------------- | ------------------------------------------------------------------------------ |
 | Initial correspondence search | `corr_before_init_opt`                                                         |
 | Initial pose optimization     | `inliers_after_init_opt`                                                       |
@@ -26,15 +43,19 @@ Gray labels denote the intermediate metrics logged at each stage for tracking an
 The logged `final_mean_visual_chi2` is computed from the weighted reprojection error used by ORB-SLAM3 during pose optimization:
 
 $$
-\chi^2 = \mathbf{e}^{T}\mathbf{\Omega}\mathbf{e},
+\chi^2 = \mathbf{e}^{T}\mathbf{\Omega}\mathbf{e}
 $$
 
 where
 
-- $\mathbf{e}$ is the reprojection residual vector
-- $\mathbf{\Omega}$ is the information matrix (the inverse of the estimation error covariance matrix)
+- $\mathbf{e}$: the reprojection residual vector
+- $\mathbf{\Omega}$: the information matrix (the inverse of the estimation error covariance matrix)
 
-The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual edges after the final pose optimization, where the number of accepted edges is logged as `inliers_after_final_opt`. A lower `final_mean_visual_chi2` indicates that the accepted visual constraints are more geometrically consistent with the estimated pose, although it does not by itself guarantee correct data association.
+`final_mean_visual_chi2`: the mean χ² over all accepted visual edges after the final pose optimization
+`inliers_after_final_opt`: the number of accepted edges
+
+
+A lower `final_mean_visual_chi2` indicates that the accepted visual constraints are more geometrically consistent with the estimated pose, although it does not by itself guarantee correct data association.
 
 ---
 
@@ -68,7 +89,7 @@ The logged `final_mean_visual_chi2` is the mean χ² over all accepted visual ed
 **Figure 4.2 ORB-SLAM3 viewer snapshot under no-texture conditions**
 
 - Tracking remains operational throughout the no-texture sequence after the map initialization.
-- Feature points are primarily detected along structural edges and corners.
+- Feature points are primarily detected along visible geometric boundaries and near corners.
 
 #### 4.1.3 Analysis
 - Observation (Table 4.1):  
@@ -90,10 +111,10 @@ Map initialization in the no-texture sequence occurs at frame 521 when N = 562 (
 0.506
 
 - Conclusion:   
-The coverage loss can be explained by delayed map initialization under no-texture conditions.
+The coverage loss can be explained by delayed map initialization under no-texture condition.
 
 - Insight:  
-Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been established, structural edges alone can provide adequate geometric constraints to sustain pose tracking (Fig.4.2).
+Low texture primarily affects map initialization rather than continuous tracking. In the structure-notexture sequence, once the initial map has been built, visual features detected along geometric boundaries can provide sufficient constraints to sustain pose tracking. (Fig.4.2).
 
 ### 4.2 Pose Accuracy Degradation under No-Texture Conditions
 #### 4.2.1 Results
@@ -136,7 +157,7 @@ RPE RMSE increases from 0.008 m (texture) to 0.017 m (no-texture).
     - The similar mean visual χ² values indicate that the accepted visual constraints remain geometrically consistent, suggesting that the dominant effect of low texture is the reduction in available constraints rather than a degradation in the weighted reprojection residual of accepted constraints.
 
 - Qualitative Observation (Fig. 4.2):
-    - Structural edges and corners appears sufficient to maintain visual tracking, although with reduced accuracy and fewer visual constraints.
+    - Structural boundary lines and corners appear sufficient to maintain visual tracking, although with reduced accuracy and fewer visual constraints.
 
 - Limitations:  
 The TUM `rgbd_dataset_freiburg3_structure_texture_near` and `rgbd_dataset_freiburg3_structure_notexture_near` sequences provide similar structured indoor environments and motion patterns, but they are **not identical trajectories**. Therefore, the analysis should be interpreted as an qualitative comparison rather than a strictly controlled experiment.    
@@ -155,7 +176,7 @@ A more rigorous controlled study would use the same trajectory while removing te
 | `MH_03_medium` | Stereo | 0.071663 | 0.974 | 2700 |
 | `MH_03_medium` | Stereo-Inertial | 0.005259 | 0.854 | 2700 |
 
-**Note.** To ensure a fair comparison with the stereo-only configuration, the local map search radius for stereo-inertial configuration after IMU initialization was changed from **2** (ORB-SLAM3 default for stereo-inertial) to **1** (the stereo-only setting) .
+**Note.** To ensure a fair comparison with the stereo-only configuration, the local map search radius for stereo-inertial configuration after IMU initialization was changed from **2** (ORB-SLAM3 default for stereo-inertial) to **1** (same as the stereo-only setting) .
 
 **Table 5.2 EuRoC Angular Velocity Statistics**
 
