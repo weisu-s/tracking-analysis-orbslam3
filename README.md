@@ -52,7 +52,7 @@ Gray labels denote the metrics logged at each stage for tracking analysis.
 - Mean visual χ² `*_chi2`: Average weighted squared reprojection residual of accepted visual constraints.
 
 
-The χ² of a visual reprojection edge is defined as::
+The χ² of a visual reprojection edge is defined as:
 
 $$
 \chi^2 = \mathbf{e}^{T}\mathbf{\Omega}\mathbf{e}
@@ -95,6 +95,7 @@ A lower `final_mean_visual_chi2` indicates that the accepted visual constraints 
 | `rgbd_dataset_freiburg3_structure_texture_near` |             0.996 |         1057 |
 | `rgbd_dataset_freiburg3_structure_notexture_near` |             0.506 |         1055 |
 
+$\text{Coverage} = \frac{\text{Number of estimated poses reported by evo}}{\text{Total number of dataset frames}}$
 
 ![tum_texture_notexture_map_init](figures/tum_low_texture_map_initialization.png)
 **Figure 4.2 ORB Keypoints and Delayed Map Initialization under No-Texture Conditions**
